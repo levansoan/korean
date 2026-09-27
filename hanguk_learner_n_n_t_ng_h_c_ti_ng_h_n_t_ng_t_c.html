@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korean Learner - Học Tiếng Hàn Tương Tác</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts for Korean & Vietnamese -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans KR"', 'sans-serif'],
+                        korean: ['"Noto Sans KR"', 'sans-serif'],
+                    },
+                    colors: {
+                        kor: {
+                            rose: '#FF7E95',
+                            softpink: '#FFF0F3',
+                            lavender: '#8A70D6',
+                            softpurple: '#F3F0FF',
+                            sky: '#4A90E2',
+                            softblue: '#EBF3FF',
+                            mint: '#2DD4BF',
+                            softmint: '#E6FFFA',
+                            dark: '#1E1E2D',
+                            card: '#FFFFFF',
+                            graybg: '#F8FAFC'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 30px -10px rgba(138, 112, 214, 0.12)',
+                        'card-hover': '0 20px 35px -10px rgba(255, 126, 149, 0.18)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E1E2D;
+        }
+
+        /* Card Flip 3D Effects */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* Subtle Pulse Wave Animation for Audio Simulation */
+        @keyframes soundWave {
+            0%, 100% { height: 6px; }
+            50% { height: 24px; }
+        }
+        .animate-wave-1 { animation: soundWave 0.6s infinite ease-in-out; }
+        .animate-wave-2 { animation: soundWave 0.6s infinite ease-in-out 0.15s; }
+        .animate-wave-3 { animation: soundWave 0.6s infinite ease-in-out 0.3s; }
+        .animate-wave-4 { animation: soundWave 0.6s infinite ease-in-out 0.45s; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-kor-rose selection:text-white">
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-kor-rose via-kor-lavender to-kor-sky flex items-center justify-center text-white shadow-md font-bold text-xl font-korean">
+                        한
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold bg-gradient-to-r from-kor-rose to-kor-lavender bg-clip-text text-transparent">HanGuk</span>
+                        <span class="text-xl font-bold text-slate-700">Learner</span>
+                        <span class="block text-[10px] font-semibold text-slate-400 tracking-wider uppercase">Tiếng Hàn Cho Người Việt</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 text-kor-rose bg-kor-softpink flex items-center gap-2">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Tổng Quan
+                    </button>
+                    <button onclick="switchTab('hangul')" id="nav-hangul" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-kor-lavender hover:bg-slate-50 flex items-center gap-2">
+                        <i data-lucide="grid" class="w-4 h-4"></i> Bảng Chữ Cái
+                    </button>
+                    <button onclick="switchTab('flashcards')" id="nav-flashcards" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-kor-lavender hover:bg-slate-50 flex items-center gap-2">
+                        <i data-lucide="layers" class="w-4 h-4"></i> Flashcards
+                    </button>
+                    <button onclick="switchTab('topik')" id="nav-topik" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-kor-lavender hover:bg-slate-50 flex items-center gap-2">
+                        <i data-lucide="award" class="w-4 h-4"></i> Thi TOPIK
+                    </button>
+                    <button onclick="switchTab('ai-speaking')" id="nav-ai-speaking" class="nav-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 text-slate-600 hover:text-kor-lavender hover:bg-slate-50 flex items-center gap-2">
+                        <i data-lucide="mic" class="w-4 h-4"></i> Luyện AI
+                    </button>
+                </nav>
+
+                <!-- Right Action / User Profile Brief -->
+                <div class="hidden sm:flex items-center gap-3">
+                    <div class="flex items-center gap-2 px-3 py-1.5 bg-orange-50 border border-orange-100 rounded-full text-orange-600 font-bold text-xs">
+                        <i data-lucide="flame" class="w-4 h-4 fill-orange-500"></i>
+                        <span id="streak-counter-nav">5 Ngày Chuỗi</span>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-xs text-slate-600">
+                        VN
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Toggle Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('dashboard'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-kor-softpink hover:text-kor-rose flex items-center gap-3">
+                <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Tổng Quan & Tiến Độ
+            </button>
+            <button onclick="switchTab('hangul'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-kor-softpurple hover:text-kor-lavender flex items-center gap-3">
+                <i data-lucide="grid" class="w-5 h-5"></i> Bảng Chữ Cái Hangul
+            </button>
+            <button onclick="switchTab('flashcards'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-kor-softpurple hover:text-kor-lavender flex items-center gap-3">
+                <i data-lucide="layers" class="w-5 h-5"></i> Từ Vựng Flashcard
+            </button>
+            <button onclick="switchTab('topik'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-kor-softpurple hover:text-kor-lavender flex items-center gap-3">
+                <i data-lucide="award" class="w-5 h-5"></i> Luyện Thi TOPIK I
+            </button>
+            <button onclick="switchTab('ai-speaking'); toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-slate-700 hover:bg-kor-softpurple hover:text-kor-lavender flex items-center gap-3">
+                <i data-lucide="mic" class="w-5 h-5"></i> Luyện Khẩu Hình & AI
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+
+        <!-- ==================== TAB 1: DASHBOARD & PROGRESS ==================== -->
+        <section id="tab-dashboard" class="tab-content space-y-8 animate-fade-in">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-kor-lavender via-purple-600 to-kor-rose p-8 sm:p-10 text-white shadow-xl">
+                <div class="absolute -right-10 -bottom-10 opacity-15 pointer-events-none text-9xl font-korean font-bold select-none">
+                    한국어
+                </div>
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="inline-block px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-semibold tracking-wide uppercase">
+                        Xin chào, Học viên! 👋
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">
+                        Chinh phục Tiếng Hàn từng bước dễ dàng & hiệu quả.
+                    </h1>
+                    <p class="text-purple-100 text-sm sm:text-base leading-relaxed">
+                        Hôm nay bạn có mục tiêu hoàn thành 20 từ vựng và 1 bài luyện đọc TOPIK. Hãy tiếp tục duy trì chuỗi học tập nào!
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-4">
+                        <button onclick="switchTab('flashcards')" class="px-6 py-3 rounded-xl bg-white text-kor-lavender font-bold text-sm hover:bg-purple-50 transition shadow-lg flex items-center gap-2">
+                            <i data-lucide="play-circle" class="w-5 h-5"></i> Học Từ Vựng Ngay
+                        </button>
+                        <button onclick="switchTab('hangul')" class="px-6 py-3 rounded-xl bg-white/15 backdrop-blur-md border border-white/30 text-white font-semibold text-sm hover:bg-white/25 transition flex items-center gap-2">
+                            Xem Bảng Chữ Cái
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Overview Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Stat 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chuỗi Học Tập</span>
+                        <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center">
+                            <i data-lucide="flame" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-800" id="stat-streak">5 Ngày</div>
+                    <p class="text-xs text-emerald-600 mt-2 font-medium flex items-center gap-1">
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Duy trì tốt hơn 85% người học
+                    </p>
+                </div>
+
+                <!-- Stat 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Từ Đã Thuộc</span>
+                        <div class="w-10 h-10 rounded-xl bg-kor-softpink text-kor-rose flex items-center justify-center">
+                            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-800" id="stat-words">32 / 120</div>
+                    <p class="text-xs text-slate-500 mt-2">Mục tiêu tuần: 50 từ</p>
+                </div>
+
+                <!-- Stat 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Điểm TOPIK Thử</span>
+                        <div class="w-10 h-10 rounded-xl bg-kor-softpurple text-kor-lavender flex items-center justify-center">
+                            <i data-lucide="award" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-800" id="stat-score">80 / 100</div>
+                    <p class="text-xs text-emerald-600 mt-2 font-medium">Đạt cấp độ TOPIK I - L1</p>
+                </div>
+
+                <!-- Stat 4 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Thời Gian Học</span>
+                        <div class="w-10 h-10 rounded-xl bg-kor-softblue text-kor-sky flex items-center justify-center">
+                            <i data-lucide="clock" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-extrabold text-slate-800">4.5 Giờ</div>
+                    <p class="text-xs text-slate-500 mt-2">Tổng thời gian tuần này</p>
+                </div>
+            </div>
+
+            <!-- Daily Goals & Roadmap Section -->
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Daily Goal Progress (Left 2 cols) -->
+                <div class="lg:col-span-2 bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800">Mục Tiêu Hôm Nay</h3>
+                            <p class="text-xs text-slate-500">Hoàn thành các nhiệm vụ để giữ chuỗi học tập</p>
+                        </div>
+                        <span class="text-xs font-bold text-kor-lavender bg-kor-softpurple px-3 py-1 rounded-full">
+                            75% Hoàn Thành
+                        </span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="space-y-2">
+                        <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                            <div class="bg-gradient-to-r from-kor-rose to-kor-lavender h-3 rounded-full transition-all duration-500" style="width: 75%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Checklist -->
+                    <div class="space-y-3 pt-2">
+                        <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs">
+                                    <i data-lucide="check" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-800 line-through">Ôn tập 10 Nguyên âm Hangul</h4>
+                                    <p class="text-xs text-slate-400">Bảng chữ cái sơ cấp</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">+10 XP</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs">
+                                    <i data-lucide="check" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-800 line-through">Học 15 từ vựng chủ đề "Mua sắm"</h4>
+                                    <p class="text-xs text-slate-400">Flashcard thông dụng</p>
+                                </div>
+                            </div>
+                            <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg">+20 XP</span>
+                        </div>
+
+                        <div class="flex items-center justify-between p-4 rounded-2xl bg-kor-softpink/40 border border-kor-rose/20">
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full border-2 border-kor-rose bg-white flex items-center justify-center"></div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-800">Thực hành 1 Đề trắc nghiệm TOPIK I</h4>
+                                    <p class="text-xs text-slate-500">Đọc hiểu cơ bản (5 câu)</p>
+                                </div>
+                            </div>
+                            <button onclick="switchTab('topik')" class="text-xs font-bold text-white bg-kor-rose hover:bg-rose-600 px-3 py-1.5 rounded-lg transition">
+                                Làm Ngay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning Path / Modules Quick Jump (Right 1 col) -->
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+                    <h3 class="text-lg font-bold text-slate-800">Lộ Trình Học Tập</h3>
+                    <div class="space-y-4">
+                        <div onclick="switchTab('hangul')" class="p-4 rounded-2xl border border-slate-100 hover:border-kor-lavender hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-purple-50 text-kor-lavender flex items-center justify-center font-bold text-lg font-korean group-hover:scale-110 transition-transform">
+                                가
+                            </div>
+                            <div class="flex-grow">
+                                <h4 class="text-sm font-bold text-slate-800 group-hover:text-kor-lavender transition">1. Bảng Chữ Cái Hangul</h4>
+                                <p class="text-xs text-slate-400">24 Chữ cái cơ bản & Âm kép</p>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-kor-lavender"></i>
+                        </div>
+
+                        <div onclick="switchTab('flashcards')" class="p-4 rounded-2xl border border-slate-100 hover:border-kor-rose hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-rose-50 text-kor-rose flex items-center justify-center font-bold text-lg font-korean group-hover:scale-110 transition-transform">
+                                단어
+                            </div>
+                            <div class="flex-grow">
+                                <h4 class="text-sm font-bold text-slate-800 group-hover:text-kor-rose transition">2. Kho Từ Vựng Chủ Đề</h4>
+                                <p class="text-xs text-slate-400">Flashcard thông minh có audio</p>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-kor-rose"></i>
+                        </div>
+
+                        <div onclick="switchTab('topik')" class="p-4 rounded-2xl border border-slate-100 hover:border-kor-sky hover:shadow-md transition cursor-pointer flex items-center gap-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-kor-sky flex items-center justify-center font-bold text-lg font-korean group-hover:scale-110 transition-transform">
+                                시험
+                            </div>
+                            <div class="flex-grow">
+                                <h4 class="text-sm font-bold text-slate-800 group-hover:text-kor-sky transition">3. Đề Thi TOPIK I</h4>
+                                <p class="text-xs text-slate-400">Luyện giải đề & tính giờ</p>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-300 group-hover:text-kor-sky"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: HANGUL ALPHABET TABLE ==================== -->
+        <section id="tab-hangul" class="tab-content hidden space-y-8 animate-fade-in">
+            <!-- Header Section -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">Bảng Chữ Cái Tiếng Hàn (한글)</h2>
+                    <p class="text-slate-500 text-sm mt-1">Nhấp vào từng ký tự để nghe âm thanh mẫu, xem romaja và ví dụ phát âm.</p>
+                </div>
+                <!-- Filter Toggle Buttons -->
+                <div class="flex p-1.5 bg-slate-100 rounded-2xl w-fit">
+                    <button id="hangul-filter-all" onclick="filterHangul('all')" class="px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-800 shadow-sm">
+                        Tất Cả
+                    </button>
+                    <button id="hangul-filter-vowel" onclick="filterHangul('vowels')" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900">
+                        Nguyên Âm (모음)
+                    </button>
+                    <button id="hangul-filter-consonant" onclick="filterHangul('consonants')" class="px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900">
+                        Phụ Âm (자음)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Alphabet Grid -->
+            <div id="hangul-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- Javascript dynamic population -->
+            </div>
+
+            <!-- Selected Hangul Detail Drawer / Modal Preview -->
+            <div id="hangul-detail-card" class="bg-gradient-to-r from-kor-softpurple to-kor-softpink p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm transition-all duration-300">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-center gap-6">
+                        <div id="detail-char" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white text-kor-lavender flex items-center justify-center font-korean font-bold text-5xl sm:text-6xl shadow-md">
+                            아
+                        </div>
+                        <div class="space-y-1 text-center md:text-left">
+                            <span id="detail-type" class="px-3 py-1 rounded-full text-xs font-bold bg-kor-lavender text-white">
+                                Nguyên Âm Cơ Bản
+                            </span>
+                            <h3 id="detail-romaja" class="text-2xl font-bold text-slate-800 pt-1">a</h3>
+                            <p id="detail-desc" class="text-slate-600 text-sm">Phát âm tròn môi nhẹ giống âm "a" trong tiếng Việt.</p>
+                        </div>
+                    </div>
+
+                    <!-- Example Word Block -->
+                    <div class="bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-white/60 w-full md:w-auto min-w-[240px] space-y-2">
+                        <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Ví dụ từ vựng</span>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div id="detail-example-kr" class="text-xl font-bold font-korean text-slate-800">아이</div>
+                                <div id="detail-example-vn" class="text-xs text-slate-500">Em bé (ai)</div>
+                            </div>
+                            <button onclick="playCurrentHangulSound()" class="w-10 h-10 rounded-full bg-kor-rose text-white flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition">
+                                <i data-lucide="volume-2" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: FLASHCARDS SYSTEM ==================== -->
+        <section id="tab-flashcards" class="tab-content hidden space-y-8 animate-fade-in">
+            <!-- Header & Topic Selector -->
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">Thẻ Từ Vựng Thông Minh (Flashcards)</h2>
+                    <p class="text-slate-500 text-sm mt-1">Chạm hoặc nhấp vào thẻ để lật mặt xem nghĩa tiếng Việt và ví dụ.</p>
+                </div>
+
+                <!-- Category Pills -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
+                    <button onclick="changeFlashcardTopic('greetings')" id="topic-greetings" class="topic-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-kor-lavender text-white shadow-sm">
+                        👋 Chào Hỏi
+                    </button>
+                    <button onclick="changeFlashcardTopic('shopping')" id="topic-shopping" class="topic-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+                        🛍️ Mua Sắm
+                    </button>
+                    <button onclick="changeFlashcardTopic('travel')" id="topic-travel" class="topic-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+                        ✈️ Du Lịch
+                    </button>
+                    <button onclick="changeFlashcardTopic('topik1')" id="topic-topik1" class="topic-btn px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-slate-100 text-slate-600 hover:bg-slate-200">
+                        📚 TOPIK I Core
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Interactive Flashcard Display -->
+            <div class="max-w-xl mx-auto space-y-6">
+                <!-- Card Container with 3D Flip -->
+                <div class="perspective-1000 w-full h-80 cursor-pointer" onclick="flipFlashcard()">
+                    <div id="flashcard-inner" class="relative w-full h-full duration-500 transform-style-3d shadow-xl rounded-3xl">
+                        
+                        <!-- Front Face -->
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-white to-kor-softpurple rounded-3xl border border-purple-100 p-8 flex flex-col justify-between items-center backface-hidden">
+                            <div class="w-full flex justify-between items-center">
+                                <span id="fc-category-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-kor-softpurple text-kor-lavender">
+                                    Chào Hỏi
+                                </span>
+                                <button onclick="event.stopPropagation(); playFlashcardAudio()" class="w-10 h-10 rounded-full bg-kor-lavender/10 hover:bg-kor-lavender text-kor-lavender hover:text-white flex items-center justify-center transition">
+                                    <i data-lucide="volume-2" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+
+                            <div class="text-center my-auto space-y-2">
+                                <h3 id="fc-korean" class="text-4xl sm:text-5xl font-extrabold font-korean text-slate-800">
+                                    안녕하세요
+                                </h3>
+                                <p id="fc-romaja" class="text-slate-400 font-medium text-sm">
+                                    [an-nyeong-ha-se-yo]
+                                </p>
+                            </div>
+
+                            <p class="text-xs text-slate-400 flex items-center gap-1 font-medium">
+                                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> Nhấp để xem nghĩa tiếng Việt
+                            </p>
+                        </div>
+
+                        <!-- Back Face -->
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-900 to-kor-dark text-white rounded-3xl p-8 flex flex-col justify-between items-center backface-hidden rotate-y-180 border border-slate-800">
+                            <div class="w-full flex justify-between items-center">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-white/10 text-rose-300">
+                                    Ý Nghĩa & Sử Dụng
+                                </span>
+                                <span id="fc-pos" class="text-xs text-slate-400 italic">Thán từ</span>
+                            </div>
+
+                            <div class="text-center my-auto space-y-3">
+                                <h4 id="fc-vietnamese" class="text-2xl sm:text-3xl font-extrabold text-rose-300">
+                                    Xin chào
+                                </h4>
+                                <div class="bg-white/5 p-3 rounded-2xl border border-white/10 text-xs sm:text-sm text-slate-300">
+                                    <span class="block text-slate-400 mb-1">Ví dụ đặt câu:</span>
+                                    <p id="fc-example" class="font-korean">안녕하세요, 반갑습니다!</p>
+                                    <p id="fc-example-vn" class="text-slate-400 text-xs mt-0.5">(Xin chào, rất vui được gặp bạn!)</p>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-slate-400 flex items-center gap-1 font-medium">
+                                <i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i> Nhấp để quay lại
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation & Status Actions -->
+                <div class="flex items-center justify-between gap-4">
+                    <button onclick="prevFlashcard()" class="p-3 sm:px-5 sm:py-3 rounded-2xl bg-white border border-slate-200 text-slate-700 font-bold text-sm hover:bg-slate-50 transition flex items-center gap-2">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                        <span class="hidden sm:inline">Từ Trước</span>
+                    </button>
+
+                    <div class="text-xs font-bold text-slate-500">
+                        <span id="fc-current-index">1</span> / <span id="fc-total-count">5</span>
+                    </div>
+
+                    <button id="fc-master-btn" onclick="toggleWordMastered()" class="px-4 py-3 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 font-bold text-sm hover:bg-emerald-100 transition flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        <span>Đã Thuộc</span>
+                    </button>
+
+                    <button onclick="nextFlashcard()" class="p-3 sm:px-5 sm:py-3 rounded-2xl bg-kor-rose text-white font-bold text-sm hover:bg-rose-600 shadow-md transition flex items-center gap-2">
+                        <span class="hidden sm:inline">Từ Tiếp</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: TOPIK QUIZ SIMULATOR ==================== -->
+        <section id="tab-topik" class="tab-content hidden space-y-8 animate-fade-in">
+            <!-- Top Banner / Timer Bar -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-700 uppercase">
+                            TOPIK I - Đọc Hiểu Sơ Cấp
+                        </span>
+                        <span class="text-xs text-slate-400">Đề mô phỏng #01</span>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-slate-800 mt-2">Bài Thi Trắc Nghiệm Đánh Giá</h2>
+                </div>
+
+                <!-- Timer & Score Display -->
+                <div class="flex items-center gap-4">
+                    <div class="bg-slate-900 text-white px-5 py-3 rounded-2xl flex items-center gap-3">
+                        <i data-lucide="timer" class="w-5 h-5 text-kor-rose animate-pulse"></i>
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">Thời gian</span>
+                            <span id="topik-timer" class="text-lg font-mono font-bold">15:00</span>
+                        </div>
+                    </div>
+                    <div class="bg-kor-softpurple px-5 py-3 rounded-2xl text-kor-lavender border border-purple-100">
+                        <span class="text-[10px] text-purple-400 font-bold block uppercase tracking-wider">Điểm số</span>
+                        <span id="topik-score-live" class="text-lg font-bold">0 / 100</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Card Container -->
+            <div class="bg-white p-6 sm:p-10 rounded-3xl border border-slate-100 shadow-sm space-y-8 max-w-3xl mx-auto">
+                <!-- Question Number & Progress Bar -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+                        <span>Câu hỏi <span id="quiz-current-num">1</span> trên <span id="quiz-total-num">3</span></span>
+                        <span id="quiz-percent">33%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                        <div id="quiz-progress-bar" class="bg-kor-lavender h-2 rounded-full transition-all duration-300" style="width: 33%"></div>
+                    </div>
+                </div>
+
+                <!-- Question Text -->
+                <div class="space-y-4">
+                    <span class="text-xs font-extrabold text-kor-rose uppercase tracking-wider block">[Đọc & Chọn đáp án đúng]</span>
+                    <h3 id="quiz-question-text" class="text-xl sm:text-2xl font-bold font-korean text-slate-800 leading-snug">
+                        다음 밑줄 친 부분과 의미가 gắt한 것을 고르십시오.
+                    </h3>
+                    <div id="quiz-context-box" class="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-slate-700 font-korean text-base">
+                        저는 매일 도서관에서 책을 <span class="underline font-bold text-kor-lavender">읽습니다</span>.
+                    </div>
+                </div>
+
+                <!-- Multiple Choice Options -->
+                <div id="quiz-options-container" class="space-y-3">
+                    <!-- Dynamic Answer Buttons rendered by JS -->
+                </div>
+
+                <!-- Explanation Box (Initially Hidden) -->
+                <div id="quiz-explanation-box" class="hidden p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 space-y-2 animate-fade-in">
+                    <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-700">
+                        <i data-lucide="lightbulb" class="w-4 h-4"></i> Giải Thích Chi Tiết
+                    </div>
+                    <p id="quiz-explanation-text" class="text-sm leading-relaxed">
+                        Từ "읽습니다" xuất phát từ động từ nguyên thể 읽다 (đọc). Câu ví dụ có nghĩa: "Tôi đọc sách ở thư viện mỗi ngày".
+                    </p>
+                </div>
+
+                <!-- Action Footer -->
+                <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                    <button onclick="resetQuiz()" class="text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center gap-1">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Làm lại bài thi
+                    </button>
+                    <button id="quiz-next-btn" onclick="nextQuizQuestion()" disabled class="px-6 py-3 rounded-xl bg-slate-200 text-slate-400 font-bold text-sm transition flex items-center gap-2 cursor-not-allowed">
+                        <span>Câu Tiếp Theo</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 5: AI SPEAKING & LISTENING SIMULATOR ==================== -->
+        <section id="tab-ai-speaking" class="tab-content hidden space-y-8 animate-fade-in">
+            <!-- Header -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-kor-softmint text-kor-mint font-extrabold text-xs mb-2">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Công nghệ nhận diện giọng nói
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">Luyện Khẩu Hình & Phát Âm AI</h2>
+                    <p class="text-slate-500 text-sm mt-1">Lắng nghe hội thoại mẫu, thu âm giọng nói của bạn và nhận phản hồi tức thì.</p>
+                </div>
+            </div>
+
+            <!-- Dialogue & Practice Grid -->
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- AI Tutor Dialogue Card -->
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-kor-lavender to-kor-sky text-white flex items-center justify-center font-bold text-xl shadow-md">
+                                AI
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-base">Giao tiếp tại Quán Cà Phê</h3>
+                                <p class="text-xs text-slate-400">Chủ đề: Gọi món đồ uống</p>
+                            </div>
+                        </div>
+
+                        <!-- Chat Bubbles Simulation -->
+                        <div class="space-y-3 pt-2">
+                            <!-- AI Bubble -->
+                            <div class="p-4 rounded-2xl bg-kor-softpurple border border-purple-100 text-slate-800 space-y-1">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] font-bold text-kor-lavender uppercase">AI Giáo Viên</span>
+                                    <button onclick="playAiDialogueAudio()" class="text-kor-lavender hover:scale-110 transition">
+                                        <i data-lucide="volume-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                <p class="font-korean font-bold text-lg text-slate-800">어서 오세요! 무엇을 드릴까요?</p>
+                                <p class="text-xs text-slate-500">(Xin chào quý khách! Tôi có thể lấy gì cho bạn?)</p>
+                            </div>
+
+                            <!-- Target Response Bubble (User should speak this) -->
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 space-y-1">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">Mẫu câu bạn cần nói:</span>
+                                <p class="font-korean font-bold text-lg text-kor-rose">아메리카노 한 잔 주세요.</p>
+                                <p class="text-xs text-slate-500">(Cho tôi một ly Americano.)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audio Simulation Animation Bar -->
+                    <div id="audio-wave-box" class="hidden p-4 bg-slate-900 rounded-2xl flex items-center justify-center gap-2">
+                        <div class="w-1.5 bg-kor-rose rounded-full animate-wave-1"></div>
+                        <div class="w-1.5 bg-kor-lavender rounded-full animate-wave-2"></div>
+                        <div class="w-1.5 bg-kor-sky rounded-full animate-wave-3"></div>
+                        <div class="w-1.5 bg-kor-mint rounded-full animate-wave-4"></div>
+                        <span class="text-xs font-bold text-white ml-2">Đang ghi âm giọng nói...</span>
+                    </div>
+
+                    <!-- Recording Trigger Button -->
+                    <div class="text-center pt-2">
+                        <button id="mic-btn" onclick="toggleMicRecording()" class="w-20 h-20 rounded-full bg-gradient-to-tr from-kor-rose to-rose-400 text-white flex items-center justify-center mx-auto shadow-lg hover:scale-105 active:scale-95 transition group">
+                            <i data-lucide="mic" class="w-8 h-8 group-hover:animate-bounce"></i>
+                        </button>
+                        <p id="mic-status-text" class="text-xs font-bold text-slate-500 mt-3">Nhấp micro để bắt đầu thu âm</p>
+                    </div>
+                </div>
+
+                <!-- Feedback & AI Assessment Output -->
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg mb-4">Kết Quả Đánh Giá</h3>
+                        
+                        <!-- Score Display -->
+                        <div class="p-6 rounded-2xl bg-kor-softmint/60 border border-emerald-200 text-center space-y-2">
+                            <span class="text-xs font-bold text-emerald-700 uppercase tracking-wider block">Độ Chính Xác Phát Âm</span>
+                            <div id="ai-score-value" class="text-5xl font-extrabold text-emerald-600">92%</div>
+                            <p id="ai-score-label" class="text-xs font-semibold text-emerald-800">Rất Tuyệt Mừng! Khẩu hình chuẩn tự nhiên.</p>
+                        </div>
+
+                        <!-- Phonetic Breakdown -->
+                        <div class="mt-6 space-y-3">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Chi Tiết Âm Tiết</h4>
+                            <div class="grid grid-cols-4 gap-2 text-center">
+                                <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200">
+                                    <div class="font-korean font-bold text-slate-800">아</div>
+                                    <div class="text-[10px] text-emerald-600 font-bold">100%</div>
+                                </div>
+                                <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200">
+                                    <div class="font-korean font-bold text-slate-800">메리</div>
+                                    <div class="text-[10px] text-emerald-600 font-bold">95%</div>
+                                </div>
+                                <div class="p-3 bg-amber-50 rounded-xl border border-amber-200">
+                                    <div class="font-korean font-bold text-slate-800">카노</div>
+                                    <div class="text-[10px] text-amber-600 font-bold">82%</div>
+                                </div>
+                                <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200">
+                                    <div class="font-korean font-bold text-slate-800">주세요</div>
+                                    <div class="text-[10px] text-emerald-600 font-bold">96%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendation Note -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-1">
+                        <span class="font-bold text-slate-800 block">💡 Gợi ý cải thiện:</span>
+                        Âm "카" (ka) nên bật hơi nhẹ nhàng hơn một chút để giọng tự nhiên như người bản xứ Seoul.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+            <div class="flex items-center justify-center gap-2">
+                <div class="w-6 h-6 rounded-lg bg-kor-rose text-white flex items-center justify-center text-xs font-bold font-korean">한</div>
+                <span class="font-bold text-slate-800 text-sm">HanGuk Learner</span>
+            </div>
+            <p class="text-xs text-slate-400">© 2026 HanGuk Learner Interactive Prototype. Tất cả nội dung dành cho mục đích học tập.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ==================== DATA SOURCES ==================== */
+        
+        // Hangul Alphabet Data
+        const HANGUL_DATA = [
+            // Vowels
+            { char: '아', type: 'vowels', romaja: 'a', desc: 'Âm "a" giống tiếng Việt', exampleKr: '아이', exampleVn: 'Em bé (ai)' },
+            { char: '야', type: 'vowels', romaja: 'ya', desc: 'Kết hợp "y" + "a"', exampleKr: '야구', exampleVn: 'Bóng đày (ya-gu)' },
+            { char: '어', type: 'vowels', romaja: 'eo', desc: 'Phát âm "ơ" hoặc "o" mở', exampleKr: '어머니', exampleVn: 'Mẹ (eo-meo-ni)' },
+            { char: '여', type: 'vowels', romaja: 'yeo', desc: 'Kết hợp "y" + "ơ"', exampleKr: '여우', exampleVn: 'Con cáo (yeo-u)' },
+            { char: '오', type: 'vowels', romaja: 'o', desc: 'Âm "ô" tròn môi', exampleKr: '오리', exampleVn: 'Con vịt (o-ri)' },
+            { char: '요', type: 'vowels', romaja: 'yo', desc: 'Kết hợp "y" + "ô"', exampleKr: '요리', exampleVn: 'Nấu ăn (yo-ri)' },
+            { char: '우', type: 'vowels', romaja: 'u', desc: 'Âm "u" chúm môi', exampleKr: '우유', exampleVn: 'Sữa tươi (u-yu)' },
+            { char: '유', type: 'vowels', romaja: 'yu', desc: 'Kết hợp "y" + "u"', exampleKr: '유리', exampleVn: 'Thủy tinh (yu-ri)' },
+            { char: '으', type: 'vowels', romaja: 'eu', desc: 'Âm "ư" dẹt môi', exampleKr: '으뜸', exampleVn: 'Hàng đầu (eu-tteum)' },
+            { char: '이', type: 'vowels', romaja: 'i', desc: 'Âm "i" dẹt môi', exampleKr: '이빨', exampleVn: 'Răng (i-ppal)' },
+            
+            // Consonants
+            { char: 'ㄱ', type: 'consonants', romaja: 'g/k', desc: 'Phát âm giữa "g" và "k"', exampleKr: '가방', exampleVn: 'Cái cặp (ga-bang)' },
+            { char: 'ㄴ', type: 'consonants', romaja: 'n', desc: 'Phát âm "n" nhẹ', exampleKr: '나비', exampleVn: 'Con bướm (na-bi)' },
+            { char: 'ㄷ', type: 'consonants', romaja: 'd/t', desc: 'Phát âm giữa "đ" và "t"', exampleKr: '다리', exampleVn: 'Cái chân / Cây cầu (da-ri)' },
+            { char: 'ㄹ', type: 'consonants', romaja: 'r/l', desc: 'Uốn lưỡi nhẹ giữa "r" và "l"', exampleKr: '라면', exampleVn: 'Mì tôm (ra-myeon)' },
+            { char: 'ㅁ', type: 'consonants', romaja: 'm', desc: 'Phát âm "m" khép môi', exampleKr: '모자', exampleVn: 'Cái mũ (mo-ja)' },
+            { char: 'ㅂ', type: 'consonants', romaja: 'b/p', desc: 'Phát âm giữa "b" và "p"', exampleKr: '바지', exampleVn: 'Cái quần (ba-ji)' },
+            { char: 'ㅅ', type: 'consonants', romaja: 's', desc: 'Phát âm "s" nhẹ', exampleKr: '사과', exampleVn: 'Quả táo (sa-gwa)' },
+            { char: 'ㅇ', type: 'consonants', romaja: 'ng/-', desc: 'Câm khi ở đầu, đọc là "ng" khi ở cuối', exampleKr: '안녕', exampleVn: 'Xin chào (an-nyeong)' },
+            { char: 'ㅈ', type: 'consonants', romaja: 'j', desc: 'Phát âm "ch" nhẹ', exampleKr: '지도', exampleVn: 'Bản đồ (ji-do)' },
+            { char: 'ㅊ', type: 'consonants', romaja: 'ch', desc: 'Phát âm "ch" bật hơi mạnh', exampleKr: '차', exampleVn: 'Trà / Xe hơi (cha)' },
+            { char: 'ㅋ', type: 'consonants', romaja: 'k', desc: 'Phát âm "k" bật hơi', exampleKr: '커피', exampleVn: 'Cà phê (keo-phi)' },
+            { char: 'ㅌ', type: 'consonants', romaja: 't', desc: 'Phát âm "th" bật hơi', exampleKr: '토끼', exampleVn: 'Con thỏ (tho-kki)' }
+        ];
+
+        // Flashcards Data
+        const FLASHCARD_DATA = {
+            greetings: [
+                { kr: '안녕하세요', romaja: 'an-nyeong-ha-se-yo', vn: 'Xin chào (Lịch sự)', pos: 'Thán từ', exKr: '안녕하세요, 반갑습니다!', exVn: 'Xin chào, rất vui được gặp bạn!' },
+                { kr: '감사합니다', romaja: 'gam-sa-ham-ni-da', vn: 'Cảm ơn', pos: 'Động từ', exKr: '도와주셔서 감사합니다.', exVn: 'Cảm ơn vì đã giúp đỡ tôi.' },
+                { kr: '죄송합니다', romaja: 'joi-song-ham-ni-da', vn: 'Xin lỗi', pos: 'Động từ', exKr: '늦어서 죄송합니다.', exVn: 'Xin lỗi vì tôi đến trễ.' },
+                { kr: '안녕히 계세요', romaja: 'an-nyeong-hi gye-se-yo', vn: 'Tạm biệt (Người đi chào người ở lại)', pos: 'Cụm từ', exKr: '저는 먼저 갑니다. 안녕히 계세요!', exVn: 'Tôi về trước đây. Ở lại may mắn nhé!' },
+                { kr: '반갑습니다', romaja: 'ban-gap-seum-ni-da', vn: 'Rất vui được gặp bạn', pos: 'Tính từ', exKr: '처음 뵙겠습니다. 반갑습니다.', exVn: 'Lần đầu gặp mặt. Rất vui được biết bạn.' }
+            ],
+            shopping: [
+                { kr: '얼마예요?', romaja: 'eol-ma-ye-yo?', vn: 'Bao nhiêu tiền?', pos: 'Mẫu câu', exKr: '이 사과 얼마예요?', exVn: 'Quả táo này bao nhiêu tiền?' },
+                { kr: '비싸요', romaja: 'bi-ssa-yo', vn: 'Mắc / Đắt', pos: 'Tính từ', exKr: '이 옷은 조금 비싸요.', exVn: 'Bộ quần áo này hơi đắt.' },
+                { kr: '깎아 주세요', romaja: 'kka-kka ju-se-yo', vn: 'Giảm giá cho tôi nhé', pos: 'Mẫu câu', exKr: '너무 비싸요. 좀 깎아 주세요.', exVn: 'Đắt quá. Giảm giá cho tôi một chút nhé.' },
+                { kr: '영수증', romaja: 'yeong-su-jeung', vn: 'Hóa đơn / Biên nhận', pos: 'Danh từ', exKr: '영수증 주세요.', exVn: 'Cho tôi xin hóa đơn ạ.' }
+            ],
+            travel: [
+                { kr: '화장실', romaja: 'hwa-jang-sil', vn: 'Nhà vệ sinh', pos: 'Danh từ', exKr: '화장실이 어디에 있어요?', exVn: 'Nhà vệ sinh ở đâu ạ?' },
+                { kr: '공항', romaja: 'gong-hang', vn: 'Sân bay', pos: 'Danh từ', exKr: '인천공항으로 가 주세요.', exVn: 'Xin chở tôi đến sân bay Incheon.' },
+                { kr: '지하철', romaja: 'ji-ha-cheol', vn: 'Tàu điện ngầm', pos: 'Danh từ', exKr: '지하철역이 가까워요.', exVn: 'Trạm tàu điện ngầm ở rất gần.' }
+            ],
+            topik1: [
+                { kr: '공부하다', romaja: 'gong-bu-ha-da', vn: 'Học tập', pos: 'Động từ', exKr: '도서관에서 한국어를 공부해요.', exVn: 'Tôi học tiếng Hàn ở thư viện.' },
+                { kr: '친구', romaja: 'chin-gu', vn: 'Bạn bè', pos: 'Danh từ', exKr: '주말에 친구를 만나요.', exVn: 'Cuối tuần tôi gặp bạn bè.' },
+                { kr: '식당', romaja: 'sik-dang', vn: 'Nhà hàng / Quán ăn', pos: 'Danh từ', exKr: '한국 식당에서 비빔밥을 먹어요.', exVn: 'Tôi ăn cơm trộn ở nhà hàng Hàn Quốc.' }
+            ]
+        };
+
+        // Quiz Data
+        const QUIZ_DATA = [
+            {
+                q: "다음 밑줄 친 부분과 의미가 gắt (giống) nhất với từ bên dưới:",
+                context: "저는 매일 도서관에서 책을 <span class='underline font-bold text-kor-lavender'>읽습니다</span>.",
+                options: [
+                    { text: "1. 봅니다 (Xem / Nhìn)", correct: false },
+                    { text: "2. 읽습니다 (Đọc)", correct: true },
+                    { text: "3. 쓰습니다 (Viết)", correct: false },
+                    { text: "4. 듣습니다 (Nghe)", correct: false }
+                ],
+                explanation: "Động từ gốc '읽다' nghĩa là đọc sách (책을 읽다). Đáp án 2 chính xác."
+            },
+            {
+                q: "Điền từ thích hợp vào chỗ trống (_____):",
+                context: "가: 화장실이 _____ 에 있어요?<br>나: 저기에 있어요.",
+                options: [
+                    { text: "1. 누구 (Ai)", correct: false },
+                    { text: "2. 무엇 (Cái gì)", correct: false },
+                    { text: "3. 어디 (Ở đâu)", correct: true },
+                    { text: "4. 언제 (Khi nào)", correct: false }
+                ],
+                explanation: "'어디' dùng để hỏi vị trí/địa điểm (Nhà vệ sinh ở đâu?). Đáp án 3 đúng."
+            },
+            {
+                q: "Chọn từ có ý nghĩa TRÁI NGƯỢC với từ được gạch chân:",
+                context: "날씨가 <span class='underline font-bold text-kor-rose'>춥습니다</span>.",
+                options: [
+                    { text: "1. 덥습니다 (Nóng)", correct: true },
+                    { text: "2. 작습니다 (Nhỏ)", correct: false },
+                    { text: "3. 나쁩니다 (Xấu)", correct: false },
+                    { text: "4. 쉽습니다 (Dễ)", correct: false }
+                ],
+                explanation: "Từ '춥다' có nghĩa là Lạnh. Từ trái nghĩa là '덥다' (Nóng). Đáp án 1 đúng."
+            }
+        ];
+
+        /* ==================== STATE MANAGEMENT ==================== */
+        let currentTab = 'dashboard';
+        let currentHangulFilter = 'all';
+        let selectedHangul = HANGUL_DATA[0];
+        
+        let currentFcTopic = 'greetings';
+        let currentFcIndex = 0;
+        let isFcFlipped = false;
+        let masteredWords = new Set();
+
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let selectedAnswerIndex = null;
+
+        let isRecording = false;
+
+        /* ==================== LIFECYCLE & INITIALIZATION ==================== */
+        window.onload = function() {
+            lucide.createIcons();
+            renderHangulGrid();
+            updateHangulDetail(selectedHangul);
+            renderFlashcard();
+            renderQuizQuestion();
+        };
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Show target content
+            const target = document.getElementById(`tab-${tabId}`);
+            if (target) target.classList.remove('hidden');
+
+            // Update Navigation active state styling
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-kor-rose', 'bg-kor-softpink');
+                btn.classList.add('text-slate-600');
+            });
+
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('text-kor-rose', 'bg-kor-softpink');
+                activeBtn.classList.remove('text-slate-600');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        /* ==================== MODULE 1: HANGUL TABLE LOGIC ==================== */
+        function renderHangulGrid() {
+            const container = document.getElementById('hangul-grid');
+            container.innerHTML = '';
+
+            const filtered = HANGUL_DATA.filter(item => {
+                if (currentHangulFilter === 'all') return true;
+                return item.type === currentHangulFilter;
+            });
+
+            filtered.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = `bg-white p-4 rounded-2xl border ${selectedHangul.char === item.char ? 'border-kor-lavender ring-2 ring-purple-100' : 'border-slate-100'} hover:border-kor-lavender hover:shadow-md transition cursor-pointer flex flex-col items-center justify-center space-y-1 group`;
+                card.onclick = () => {
+                    selectedHangul = item;
+                    renderHangulGrid();
+                    updateHangulDetail(item);
+                    playAudioSimulation(item.char);
+                };
+
+                card.innerHTML = `
+                    <div class="text-3xl font-extrabold font-korean text-slate-800 group-hover:scale-110 transition-transform">${item.char}</div>
+                    <div class="text-xs font-semibold text-kor-lavender">[${item.romaja}]</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterHangul(type) {
+            currentHangulFilter = type;
+            
+            // Update filter buttons styling
+            ['all', 'vowel', 'consonant'].forEach(t => {
+                const btn = document.getElementById(`hangul-filter-${t}`);
+                if (btn) {
+                    btn.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
+                    btn.classList.add('text-slate-600');
+                }
+            });
+
+            const activeTypeKey = type === 'vowels' ? 'vowel' : (type === 'consonants' ? 'consonant' : 'all');
+            const activeBtn = document.getElementById(`hangul-filter-${activeTypeKey}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
+                activeBtn.classList.remove('text-slate-600');
+            }
+
+            renderHangulGrid();
+        }
+
+        function updateHangulDetail(item) {
+            document.getElementById('detail-char').innerText = item.char;
+            document.getElementById('detail-romaja').innerText = item.romaja;
+            document.getElementById('detail-desc').innerText = item.desc;
+            document.getElementById('detail-type').innerText = item.type === 'vowels' ? 'Nguyên Âm' : 'Phụ Âm';
+            document.getElementById('detail-example-kr').innerText = item.exampleKr;
+            document.getElementById('detail-example-vn').innerText = item.exampleVn;
+        }
+
+        function playCurrentHangulSound() {
+            playAudioSimulation(selectedHangul.char);
+        }
+
+        /* ==================== MODULE 2: FLASHCARD LOGIC ==================== */
+        function changeFlashcardTopic(topic) {
+            currentFcTopic = topic;
+            currentFcIndex = 0;
+            isFcFlipped = false;
+            
+            // Update topic button styling
+            document.querySelectorAll('.topic-btn').forEach(btn => {
+                btn.classList.remove('bg-kor-lavender', 'text-white', 'shadow-sm');
+                btn.classList.add('bg-slate-100', 'text-slate-600');
+            });
+            const activeBtn = document.getElementById(`topic-${topic}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-kor-lavender', 'text-white', 'shadow-sm');
+                activeBtn.classList.remove('bg-slate-100', 'text-slate-600');
+            }
+
+            resetCardFlip();
+            renderFlashcard();
+        }
+
+        function renderFlashcard() {
+            const list = FLASHCARD_DATA[currentFcTopic];
+            const current = list[currentFcIndex];
+
+            document.getElementById('fc-korean').innerText = current.kr;
+            document.getElementById('fc-romaja').innerText = `[${current.romaja}]`;
+            document.getElementById('fc-vietnamese').innerText = current.vn;
+            document.getElementById('fc-pos').innerText = current.pos;
+            document.getElementById('fc-example').innerText = current.exKr;
+            document.getElementById('fc-example-vn').innerText = `(${current.exVn})`;
+
+            document.getElementById('fc-current-index').innerText = currentFcIndex + 1;
+            document.getElementById('fc-total-count').innerText = list.length;
+
+            // Mastered Status Button Toggle
+            const isMastered = masteredWords.has(`${currentFcTopic}_${currentFcIndex}`);
+            const masterBtn = document.getElementById('fc-master-btn');
+            if (isMastered) {
+                masterBtn.className = "px-4 py-3 rounded-2xl bg-emerald-500 text-white font-bold text-sm shadow-md transition flex items-center gap-2";
+            } else {
+                masterBtn.className = "px-4 py-3 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200 font-bold text-sm hover:bg-emerald-100 transition flex items-center gap-2";
+            }
+        }
+
+        function flipFlashcard() {
+            const inner = document.getElementById('flashcard-inner');
+            isFcFlipped = !isFcFlipped;
+            if (isFcFlipped) {
+                inner.classList.add('rotate-y-180');
+            } else {
+                inner.classList.remove('rotate-y-180');
+            }
+        }
+
+        function resetCardFlip() {
+            isFcFlipped = false;
+            document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+        }
+
+        function nextFlashcard() {
+            const list = FLASHCARD_DATA[currentFcTopic];
+            currentFcIndex = (currentFcIndex + 1) % list.length;
+            resetCardFlip();
+            setTimeout(renderFlashcard, 150);
+        }
+
+        function prevFlashcard() {
+            const list = FLASHCARD_DATA[currentFcTopic];
+            currentFcIndex = (currentFcIndex - 1 + list.length) % list.length;
+            resetCardFlip();
+            setTimeout(renderFlashcard, 150);
+        }
+
+        function toggleWordMastered() {
+            const key = `${currentFcTopic}_${currentFcIndex}`;
+            if (masteredWords.has(key)) {
+                masteredWords.delete(key);
+            } else {
+                masteredWords.add(key);
+            }
+            // Update progress stat on dashboard
+            document.getElementById('stat-words').innerText = `${masteredWords.size + 32} / 120`;
+            renderFlashcard();
+        }
+
+        function playFlashcardAudio() {
+            const list = FLASHCARD_DATA[currentFcTopic];
+            playAudioSimulation(list[currentFcIndex].kr);
+        }
+
+        /* ==================== MODULE 3: TOPIK QUIZ LOGIC ==================== */
+        function renderQuizQuestion() {
+            const current = QUIZ_DATA[currentQuizIndex];
+            selectedAnswerIndex = null;
+
+            document.getElementById('quiz-current-num').innerText = currentQuizIndex + 1;
+            document.getElementById('quiz-total-num').innerText = QUIZ_DATA.length;
+            
+            const pct = Math.round(((currentQuizIndex + 1) / QUIZ_DATA.length) * 100);
+            document.getElementById('quiz-percent').innerText = `${pct}%`;
+            document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+
+            document.getElementById('quiz-question-text').innerText = current.q;
+            document.getElementById('quiz-context-box').innerHTML = current.context;
+
+            // Render options
+            const container = document.getElementById('quiz-options-container');
+            container.innerHTML = '';
+
+            current.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-2xl border border-slate-200 hover:border-kor-lavender hover:bg-purple-50/50 font-semibold text-slate-700 text-sm sm:text-base transition flex items-center justify-between group";
+                btn.onclick = () => selectQuizOption(idx);
+                btn.id = `quiz-opt-${idx}`;
+
+                btn.innerHTML = `
+                    <span>${opt.text}</span>
+                    <div id="quiz-icon-${idx}" class="w-6 h-6 rounded-full border border-slate-300 group-hover:border-kor-lavender flex items-center justify-center"></div>
+                `;
+                container.appendChild(btn);
+            });
+
+            // Hide explanation
+            document.getElementById('quiz-explanation-box').classList.add('hidden');
+            const nextBtn = document.getElementById('quiz-next-btn');
+            nextBtn.disabled = true;
+            nextBtn.className = "px-6 py-3 rounded-xl bg-slate-200 text-slate-400 font-bold text-sm transition flex items-center gap-2 cursor-not-allowed";
+        }
+
+        function selectQuizOption(idx) {
+            if (selectedAnswerIndex !== null) return; // Prevent multiple selection
+            selectedAnswerIndex = idx;
+
+            const current = QUIZ_DATA[currentQuizIndex];
+            const isCorrect = current.options[idx].correct;
+
+            // Update UI
+            current.options.forEach((opt, i) => {
+                const btn = document.getElementById(`quiz-opt-${i}`);
+                const icon = document.getElementById(`quiz-icon-${i}`);
+
+                if (i === idx) {
+                    if (isCorrect) {
+                        btn.className = "w-full text-left p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 font-bold text-emerald-900 text-sm sm:text-base flex items-center justify-between";
+                        icon.className = "w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center";
+                        icon.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i>`;
+                        quizScore += 33;
+                    } else {
+                        btn.className = "w-full text-left p-4 rounded-2xl border-2 border-rose-500 bg-rose-50 font-bold text-rose-900 text-sm sm:text-base flex items-center justify-between";
+                        icon.className = "w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center";
+                        icon.innerHTML = `<i data-lucide="x" class="w-4 h-4"></i>`;
+                    }
+                } else if (opt.correct) {
+                    // Highlight true answer if wrong option picked
+                    btn.className = "w-full text-left p-4 rounded-2xl border-2 border-emerald-400 bg-emerald-50/50 font-semibold text-emerald-800 text-sm sm:text-base flex items-center justify-between";
+                }
+            });
+
+            lucide.createIcons();
+            document.getElementById('topik-score-live').innerText = `${quizScore} / 100`;
+
+            // Show Explanation
+            document.getElementById('quiz-explanation-text').innerText = current.explanation;
+            document.getElementById('quiz-explanation-box').classList.remove('hidden');
+
+            // Enable Next Button
+            const nextBtn = document.getElementById('quiz-next-btn');
+            nextBtn.disabled = false;
+            nextBtn.className = "px-6 py-3 rounded-xl bg-kor-rose hover:bg-rose-600 text-white font-bold text-sm shadow-md transition flex items-center gap-2 cursor-pointer";
+        }
+
+        function nextQuizQuestion() {
+            if (currentQuizIndex < QUIZ_DATA.length - 1) {
+                currentQuizIndex++;
+                renderQuizQuestion();
+            } else {
+                alert(`Chúc mừng bạn đã hoàn thành bài thi thử TOPIK! Điểm tổng kết: ${quizScore}/100`);
+            }
+        }
+
+        function resetQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('topik-score-live').innerText = `0 / 100`;
+            renderQuizQuestion();
+        }
+
+        /* ==================== MODULE 4: AI SPEAKING SIMULATOR ==================== */
+        function toggleMicRecording() {
+            isRecording = !isRecording;
+            const micBtn = document.getElementById('mic-btn');
+            const waveBox = document.getElementById('audio-wave-box');
+            const statusText = document.getElementById('mic-status-text');
+
+            if (isRecording) {
+                micBtn.className = "w-20 h-20 rounded-full bg-emerald-500 text-white flex items-center justify-center mx-auto shadow-lg animate-pulse transition";
+                waveBox.classList.remove('hidden');
+                statusText.innerText = "Đang thu âm... Nói '아메리카노 한 잔 주세요'";
+                
+                // Auto stop recording simulation after 3.5 seconds
+                setTimeout(() => {
+                    if (isRecording) toggleMicRecording();
+                }, 3500);
+            } else {
+                micBtn.className = "w-20 h-20 rounded-full bg-gradient-to-tr from-kor-rose to-rose-400 text-white flex items-center justify-center mx-auto shadow-lg hover:scale-105 transition";
+                waveBox.classList.add('hidden');
+                statusText.innerText = "Đã thu âm xong! AI đã đánh giá kết quả bên phải.";
+            }
+        }
+
+        function playAiDialogueAudio() {
+            playAudioSimulation('어서 오세요! 무엇을 드릴까요?');
+        }
+
+        /* ==================== AUDIO SIMULATOR UTILITY ==================== */
+        // Web Audio API Synth Generator for click & speech simulation without external assets
+        function playAudioSimulation(text) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(350, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.15);
+
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start();
+                osc.stop(ctx.currentTime + 0.3);
+            } catch (e) {
+                console.log('Audio simulation fallback triggered', text);
+            }
+        }
+    </script>
+</body>
+</html>
